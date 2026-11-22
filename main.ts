@@ -14,4 +14,11 @@ const plan = 'AI receptionist for towing firms and locksmiths: answers after-hou
 
 const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 mkdirSync(out, { recursive: true });
+
+// The gate counts Unicode code points: fail loudly if the plan ever drifts
+// out of the 1–280 range instead of writing an invalid entry.
+const length = [...plan].length;
+if (length < 1 || length > 280) {
+  throw new Error(`entry.txt must be 1-280 characters, got ${length}`);
+}
 writeFileSync(join(out, 'entry.txt'), plan, 'utf8');
